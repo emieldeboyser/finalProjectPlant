@@ -2,7 +2,7 @@ from datetime import datetime
 from functools import wraps
 import secrets
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session
-from models import Post, User, db, Plant, MyPlant
+from models import Post, Post_gifs, User, db, Plant, MyPlant
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from models import db
@@ -59,7 +59,8 @@ def feed():
 @app.route('/add-post')
 def add_post():
     user = User.query.filter_by(id=session['user_id']).first()
-    return render_template('addPost.html', user=user)
+    gifs = Post_gifs.query.all()
+    return render_template('addPost.html', user=user, gifs=gifs)
 
 @app.route('/create-post', methods=['POST'])
 def create_post():
@@ -67,10 +68,11 @@ def create_post():
     title = form_data['title']
     content = form_data['content']
     user_id = session['user_id']
+    gif_id = int(form_data['gif_id'])
     created_at = datetime.now()
     updated_at = datetime.now()
 
-    post = Post(title=title, content=content, user_id=user_id, created_at=created_at, updated_at=updated_at)
+    post = Post(title=title, content=content, user_id=user_id, created_at=created_at, updated_at=updated_at, gif_id=gif_id)
     db.session.add(post)
     db.session.commit()
 

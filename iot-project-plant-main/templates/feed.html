@@ -22,7 +22,8 @@
                       {% if post.created_at %}
                       <p class="small">{{ post.created_at.strftime('%d/%m/%Y %H:%M') }}</p>
                       {% endif %}
-                      <img src="{{ url_for('static', filename='images/giphy.gif') }}" alt="Flower">
+                      <img src="{{ url_for('static', filename='images/' + post.gif.source) }}" alt="Flower">
+
                       <h3 class="post_title">{{ post.title }}</h3>
                       <p class="postText">{{ post.content }}</p>
 
